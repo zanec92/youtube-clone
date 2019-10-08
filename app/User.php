@@ -20,6 +20,10 @@ class User extends Authenticatable
             $model->{$model->getKeyName()} = (string) Str::uuid();
         });
     }
+
+    public function channel() {
+        return $this->hasOne(Channel::class);
+    }
     /**
      * The attributes that are mass assignable.
      *
