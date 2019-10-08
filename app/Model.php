@@ -12,8 +12,8 @@ class Model extends BaseModel
     protected static function boot() {
         parent::boot();
 
-        static::creating(function($model) {
-            $model->{$model->getKeyName} = Str::uuid();
+        static::creating(function ($model) {
+            $model->{$model->getKeyName()} = (string) Str::uuid();
         });
     }
 }
