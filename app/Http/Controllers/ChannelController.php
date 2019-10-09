@@ -46,7 +46,7 @@ class ChannelController extends Controller
      */
     public function show(Channel $channel)
     {
-        return view('channel.show', compact('channel'));
+        return view('channels.show', compact('channel'));
     }
 
     /**
