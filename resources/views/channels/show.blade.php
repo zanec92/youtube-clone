@@ -43,6 +43,16 @@
                                 <textarea name="description" id="description" rows="3" class="form-control">{{ $channel->description }}</textarea>
                             </div>
 
+                            @if($errors->any())
+                                <ul class="list-group md-5">
+                                    @foreach ($errors->all() as $error)
+                                        <li class="text-danger list-group-item">
+                                            {{ $error }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+
                             <button type="submit" class="btn btn-info">
                                 Update Channel
                             </button>
