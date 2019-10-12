@@ -32035,12 +32035,30 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 Vue.component('subscribe-button', {
   props: {
+    channel: {
+      type: Object,
+      required: true,
+      "default": function _default() {
+        return {};
+      }
+    },
     subscriptions: {
       type: Array,
       required: true,
       "default": function _default() {
         return [];
       }
+    }
+  },
+  computed: {
+    subscribed: function subscribed() {
+      if (!__auth() || this.channel.user_id === __auth().id) return false;
+      return !!this.subscriptions.find(function (subscription) {
+        return subscription.user_id == __auth().id;
+      });
+    },
+    owner: function owner() {
+      if (__auth() && this.channel.user_id === __auth().id) return true;
     }
   },
   methods: {
