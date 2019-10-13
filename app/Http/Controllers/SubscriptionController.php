@@ -16,7 +16,7 @@ class SubscriptionController extends Controller
      */
     public function store(Channel $channel)
     {
-        $channel->subscriptions()->create([
+        return $channel->subscriptions()->create([
             'user_id' => auth()->user()->id
         ]);
     }

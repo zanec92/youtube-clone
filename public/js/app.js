@@ -33063,6 +33063,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 
 
 Vue.component('subscribe-button', {
@@ -33074,13 +33082,18 @@ Vue.component('subscribe-button', {
         return {};
       }
     },
-    subscriptions: {
+    initialSubscriptions: {
       type: Array,
       required: true,
       "default": function _default() {
         return [];
       }
     }
+  },
+  data: function data() {
+    return {
+      subscriptions: this.initialSubscriptions
+    };
   },
   computed: {
     subscribed: function subscribed() {
@@ -33102,6 +33115,8 @@ Vue.component('subscribe-button', {
   },
   methods: {
     toggleSubscription: function toggleSubscription() {
+      var _this = this;
+
       if (!__auth()) {
         return alert('Please login to subscribe!');
       }
@@ -33111,9 +33126,15 @@ Vue.component('subscribe-button', {
       }
 
       if (this.subscribed) {
-        axios["delete"]("/channels/".concat(this.channel.id, "/subscriptions/").concat(this.subscription.id));
+        axios["delete"]("/channels/".concat(this.channel.id, "/subscriptions/").concat(this.subscription.id)).then(function () {
+          _this.subscriptions = _this.subscriptions.filter(function (s) {
+            return s.id !== _this.subscription.id;
+          });
+        });
       } else {
-        axios.post("/channels/".concat(this.channel.id, "/subscriptions"));
+        axios.post("/channels/".concat(this.channel.id, "/subscriptions")).then(function (response) {
+          _this.subscriptions = [].concat(_toConsumableArray(_this.subscriptions), [response.data]);
+        });
       }
     }
   }
