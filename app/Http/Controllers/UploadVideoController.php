@@ -13,4 +13,11 @@ class UploadVideoController extends Controller
             'channel' => $channel
         ]);
     }
+
+    public function store(Channel $channel) {
+        return $channel->videos()->create([
+            'title' => request()->title,
+            'path' => request()->video->store("channels/{$channel->id}")
+        ]);
+    }
 }
