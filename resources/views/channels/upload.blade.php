@@ -13,9 +13,9 @@
                     </div>
 
                     <div class="card p-3" v-else>
-                        <div class="my-4">
+                        <div class="my-4" v-for="video in videos">
                             <div class="progress mb-3">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated " role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar progress-bar-striped progress-bar-animated " role="progressbar" :style="{width: `${progress[video.name]}%`}" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <div class="row">
 
@@ -27,7 +27,7 @@
 
                                 <div class="col-md-4">
                                     <h4 class="text-center">
-                                        My Awesome video
+                                        @{{ video.name }}
                                     </h4>
                                 </div>
 
