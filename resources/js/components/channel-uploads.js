@@ -9,7 +9,8 @@ Vue.component('channel-uploads', {
     data: () => ({
         selected: false,
         videos: [],
-        progress: {}
+        progress: {},
+        uploads: []
     }),
 
     methods: {
@@ -31,8 +32,18 @@ Vue.component('channel-uploads', {
 
                         this.$forceUpdate();
                     }
+                }).then(({ data }) => {
+                    this.uploads = [
+                        ...this.uploads,
+                        data
+                    ];
                 });
             });
+
+            axios.all(uploaders)
+                .then(() => {
+                    this.videos = this.uploaders;
+                });
         }
     }
 });
