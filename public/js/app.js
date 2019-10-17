@@ -33082,7 +33082,8 @@ Vue.component('channel-uploads', {
       selected: false,
       videos: [],
       progress: {},
-      uploads: []
+      uploads: [],
+      intervals: {}
     };
   },
   methods: {
@@ -33108,7 +33109,27 @@ Vue.component('channel-uploads', {
         });
       });
       axios.all(uploaders).then(function () {
-        _this.videos = _this.uploaders;
+        _this.videos = _this.uploads;
+
+        _this.videos.forEach(function (video) {
+          _this.intervals[video.id] = setInterval(function () {
+            axios.get("/videos/".concat(video.id)).then(function (_ref2) {
+              var data = _ref2.data;
+
+              if (data.percentage === 100) {
+                clearInterval(_this.intervals[video.id]);
+              }
+
+              _this.videos = _this.videos.map(function (v) {
+                if (v.id === data.id) {
+                  return data;
+                }
+
+                return v;
+              });
+            });
+          }, 3000);
+        });
       });
     }
   }
