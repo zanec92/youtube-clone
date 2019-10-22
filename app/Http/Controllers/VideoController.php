@@ -3,6 +3,7 @@
 namespace Laratube\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Laratube\Http\Requests\Videos\UpdateVideoRequest;
 use Laratube\Video;
 
 class VideoController extends Controller
@@ -21,5 +22,12 @@ class VideoController extends Controller
         $video->increment('views');
 
         return response()->json([]);
+    }
+
+    public function update(UpdateVideoRequest $request, Video $video)
+    {
+        $video->update($request->only(['title', 'description']));
+
+        return redirect()->back();
     }
 }
