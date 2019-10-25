@@ -1935,6 +1935,14 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 //
 //
 //
@@ -2007,7 +2015,13 @@ __webpack_require__.r(__webpack_exports__);
     entity_owner: {
       required: true,
       "default": function _default() {
-        return {};
+        return '';
+      }
+    },
+    entity_id: {
+      required: true,
+      "default": function _default() {
+        return '';
       }
     }
   },
@@ -2048,12 +2062,33 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     vote: function vote(type) {
-      if (__auth() && __auth().id === this.entity_owner) {
+      var _this = this;
+
+      if (!__auth()) {
+        return alert('Please login to vote.');
+      }
+
+      if (__auth().id === this.entity_owner) {
         return alert('You cannot vote this item.');
       }
 
       if (type === 'up' && this.upvoted) return;
       if (type === 'down' && this.downvoted) return;
+      axios.post("/votes/".concat(this.entity_id, "/").concat(type)).then(function (_ref) {
+        var data = _ref.data;
+
+        if (_this.upvoted || _this.downvoted) {
+          _this.votes = _this.votes.map(function (v) {
+            if (v.user_id === __auth().id) {
+              return data;
+            }
+
+            return v;
+          });
+        } else {
+          _this.votes = [].concat(_toConsumableArray(_this.votes), [data]);
+        }
+      });
     }
   }
 });
@@ -21307,7 +21342,7 @@ var render = function() {
       "svg",
       {
         staticClass: "thumbs-up",
-        class: { "thumb-up-active": _vm.upvoted },
+        class: { "thumbs-up-active": _vm.upvoted },
         staticStyle: { "enable-background": "new 0 0 478.2 478.2" },
         attrs: {
           version: "1.1",
@@ -21341,7 +21376,7 @@ var render = function() {
       "svg",
       {
         staticClass: "thumbs-down",
-        class: { "thumb-down-active": _vm.downvoted },
+        class: { "thumbs-down-active": _vm.downvoted },
         staticStyle: { "enable-background": "new 0 0 475.092 475.092" },
         attrs: {
           version: "1.1",
