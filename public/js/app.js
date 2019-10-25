@@ -2003,6 +2003,12 @@ __webpack_require__.r(__webpack_exports__);
       "default": function _default() {
         return [];
       }
+    },
+    entity_owner: {
+      required: true,
+      "default": function _default() {
+        return {};
+      }
     }
   },
   data: function data() {
@@ -2038,6 +2044,16 @@ __webpack_require__.r(__webpack_exports__);
       return !!this.downvotes.find(function (v) {
         return v.user_id === __auth().id;
       });
+    }
+  },
+  methods: {
+    vote: function vote(type) {
+      if (__auth() && __auth().id === this.entity_owner) {
+        return alert('You cannot vote this item.');
+      }
+
+      if (type === 'up' && this.upvoted) return;
+      if (type === 'down' && this.downvoted) return;
     }
   }
 });
@@ -21302,6 +21318,11 @@ var render = function() {
           y: "0px",
           viewBox: "0 0 478.2 478.2",
           "xml:space": "preserve"
+        },
+        on: {
+          click: function($event) {
+            return _vm.vote("up")
+          }
         }
       },
       [
@@ -21333,6 +21354,11 @@ var render = function() {
           height: "475.092px",
           viewBox: "0 0 475.092 475.092",
           "xml:space": "preserve"
+        },
+        on: {
+          click: function($event) {
+            return _vm.vote("down")
+          }
         }
       },
       [

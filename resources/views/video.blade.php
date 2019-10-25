@@ -28,7 +28,7 @@
                                 {{ $video->views }} {{ str_plural('view', $video->views) }}
                             </div>
 
-                            <votes :default_votes='{{ $video->votes }}'></votes>
+                            <votes :default_votes='{{ $video->votes }}' entity_owner="{{ $video->channel->user_id }}"></votes>
                         </div>
 
                         <hr>
