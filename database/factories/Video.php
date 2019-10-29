@@ -2,19 +2,20 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Laratube\Model;
 use Faker\Generator as Faker;
+use Laratube\Channel;
+use Laratube\Video;
 
-$factory->define(Model::class, function (Faker $faker) {
-        /* $table->uuid('id');
-    $table->uuid('channel_id');
-    $table->bigInteger('views')->default(0);
-    $table->string('thumbnail')->nullable();
-    $table->integer('percentage')->nullable();
-    $table->string('title')->nullable();
-    $table->text('description')->nullable();
-    $table->string('path'); */
+$factory->define(Video::class, function (Faker $faker) {
     return [
-        //
+        'channel_id' => function () {
+            return factory(Channel::class)->create()->id;
+        },
+        'views' => $faker->numberBetween(1, 1000),
+        'thumbnail' => $faker->imageUrl(),
+        'percentage' => 100,
+        'title' => $faker->sentence(4),
+        'description' => $faker->sentence(10),
+        'path' => $faker->word()
     ];
 });

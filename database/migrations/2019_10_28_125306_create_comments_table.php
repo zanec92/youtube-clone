@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration
             $table->uuid('user_id');
             $table->uuid('video_id');
             $table->text('body');
-            $table->uuid('comments_id')->nullable();
+            $table->uuid('comment_id')->nullable();
             $table->timestamps();
         });
     }
