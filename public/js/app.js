@@ -1840,6 +1840,21 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_avatar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-avatar */ "./node_modules/vue-avatar/dist/vue-avatar.min.js");
 /* harmony import */ var vue_avatar__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_avatar__WEBPACK_IMPORTED_MODULE_0__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
 //
 //
 //
@@ -1908,9 +1923,12 @@ __webpack_require__.r(__webpack_exports__);
     fetchComments: function fetchComments() {
       var _this = this;
 
-      axios.get("/videos/".concat(this.video.id, "/comments")).then(function (_ref) {
+      var url = this.comments.next_page_url ? this.comments.next_page_url : "/videos/".concat(this.video.id, "/comments");
+      axios.get(url).then(function (_ref) {
         var data = _ref.data;
-        _this.comments = data;
+        _this.comments = _objectSpread({}, data, {
+          data: [].concat(_toConsumableArray(_this.comments.data), _toConsumableArray(data.data))
+        });
       });
     }
   }
@@ -21445,7 +21463,18 @@ var render = function() {
         )
       }),
       _vm._v(" "),
-      _vm._m(2)
+      _c("div", { staticClass: "text-center" }, [
+        _vm.comments.next_page_url
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-success",
+                on: { click: _vm.fetchComments }
+              },
+              [_vm._v("\n            Load More\n        ")]
+            )
+          : _c("span", [_vm._v("No more comments to show :)")])
+      ])
     ],
     2
   )
@@ -21501,16 +21530,6 @@ var staticRenderFns = [
             _c("small", [_vm._v("Add comment")])
           ])
         ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "text-center" }, [
-      _c("button", { staticClass: "btn btn-success" }, [
-        _vm._v("\n            Load More\n        ")
       ])
     ])
   }
