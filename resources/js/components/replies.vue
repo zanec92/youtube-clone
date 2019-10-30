@@ -12,7 +12,6 @@
 
                 <div class="d-flex">
                     <votes :default_votes="reply.votes" :entity_id="reply.id" :entity_owner="reply.user.id"></votes>
-                    <button class="btn btn-sm btn-default ml-2">Add reply</button>
                 </div>
             </div>
         </div>
@@ -49,6 +48,15 @@
                         ]
                     };
                 });
+            },
+            addReply(reply) {
+                this.replies = {
+                    ...this.replies,
+                    data: [
+                        reply,
+                        ...this.replies.data
+                    ]
+                }
             }
         }
     }

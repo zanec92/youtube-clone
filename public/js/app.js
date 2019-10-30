@@ -1904,16 +1904,40 @@ __webpack_require__.r(__webpack_exports__);
       "default": function _default() {
         return {};
       }
+    },
+    video: {
+      required: true,
+      "default": function _default() {
+        return {};
+      }
     }
   },
   data: function data() {
     return {
+      body: '',
       addingReply: false
     };
   },
   components: {
     Avatar: vue_avatar__WEBPACK_IMPORTED_MODULE_0___default.a,
     Replies: _replies_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  methods: {
+    addReply: function addReply() {
+      var _this = this;
+
+      if (!this.body) return;
+      axios.post("/comments/".concat(this.video.id), {
+        comment_id: this.comment.id,
+        body: this.body
+      }).then(function (_ref) {
+        var data = _ref.data;
+        _this.body = '';
+        _this.addingReply = false;
+
+        _this.$refs.replies.addReply(data);
+      });
+    }
   }
 });
 
@@ -2064,7 +2088,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['comment'],
@@ -2088,6 +2111,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.replies = _objectSpread({}, data, {
           data: [].concat(_toConsumableArray(_this.replies.data), _toConsumableArray(data.data))
         });
+      });
+    },
+    addReply: function addReply(reply) {
+      this.replies = _objectSpread({}, this.replies, {
+        data: [reply].concat(_toConsumableArray(this.replies.data))
       });
     }
   }
@@ -21628,15 +21656,39 @@ var render = function() {
           _vm.addingReply
             ? _c("div", { staticClass: "form-inline my-4 w-full" }, [
                 _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.body,
+                      expression: "body"
+                    }
+                  ],
                   staticClass: "form-control form-control-sm w-80",
-                  attrs: { type: "text" }
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.body },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.body = $event.target.value
+                    }
+                  }
                 }),
                 _vm._v(" "),
-                _vm._m(0)
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-primary",
+                    on: { click: _vm.addReply }
+                  },
+                  [_c("small", [_vm._v("Add reply")])]
+                )
               ])
             : _vm._e(),
           _vm._v(" "),
-          _c("replies", { attrs: { comment: _vm.comment } })
+          _c("replies", { ref: "replies", attrs: { comment: _vm.comment } })
         ],
         1
       )
@@ -21644,16 +21696,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-sm btn-primary" }, [
-      _c("small", [_vm._v("Add reply")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -21715,7 +21758,10 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.comments.data, function(comment) {
-        return _c("Comment", { key: comment.id, attrs: { comment: comment } })
+        return _c("Comment", {
+          key: comment.id,
+          attrs: { comment: comment, video: _vm.video }
+        })
       }),
       _vm._v(" "),
       _c("div", { staticClass: "text-center" }, [
@@ -21794,11 +21840,7 @@ var render = function() {
                     entity_id: reply.id,
                     entity_owner: reply.user.id
                   }
-                }),
-                _vm._v(" "),
-                _c("button", { staticClass: "btn btn-sm btn-default ml-2" }, [
-                  _vm._v("Add reply")
-                ])
+                })
               ],
               1
             )
