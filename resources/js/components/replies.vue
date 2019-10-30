@@ -3,7 +3,7 @@
         <div class="form-inline my-4 w-full">
                 <input type="text" class="form-control form-control-sm w-80">
                 <button class="btn btn-sm btn-primary">
-                    <small>Add comment</small>
+                    <small>Add reply</small>
                 </button>
         </div>
         <div class="media my-3" v-for="reply in replies.data">
@@ -16,7 +16,10 @@
                     {{ reply.body }}
                 </small>
 
-                <votes :default_votes="reply.votes" :entity_id="reply.id" :entity_owner="reply.user.id"></votes>
+                <div class="d-flex">
+                    <votes :default_votes="reply.votes" :entity_id="reply.id" :entity_owner="reply.user.id"></votes>
+                    <button class="btn btn-sm btn-default ml-2">Add reply</button>
+                </div>
             </div>
         </div>
 
