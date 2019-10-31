@@ -1,6 +1,4 @@
-# Youtube Clone
-
-<h2>Простенький клон Youtube на Laravel 5.8 и Vue.js.</h2>
+<h1>Простенький клон Youtube на Laravel 5.8 и Vue.js.</h1>
 
 <strong>Функционал:</strong>
 - Аутентификация и авторизация пользователей;
